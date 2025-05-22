@@ -3,12 +3,14 @@ from fastapi import FastAPI
 from fastapi.exceptions import RequestValidationError
 from starlette.exceptions import HTTPException as StarletteHTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from routers import books, members, loans, auth
+from app.routers import books, members, loans, auth
 #from app.routers import books, members, loans, auth
 from app.database import create_db_and_tables
 from app.core.exceptions import CustomException
 from app.core.config import settings
 from fastapi.responses import JSONResponse
+from starlette.responses import JSONResponse
+import asyncio
 
 
 logging.basicConfig(level=logging.INFO)
@@ -31,6 +33,12 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+@app.get("/health", status_code=200)
+async def health_check():
+    """
+    Endpoint de contrôle de santé pour vérifier que l'API est en cours d'exécution.
+    """
+    return {"status": "ok"}
 
 # Gestionnaire d'événements pour la startup de l'application
 @app.on_event("startup")
@@ -90,6 +98,10 @@ app.include_router(auth.router, prefix="/auth", tags=["Authentification"])
 app.include_router(books.router, prefix="/books", tags=["Livres"])
 app.include_router(members.router, prefix="/members", tags=["Membres"])
 app.include_router(loans.router, prefix="/loans", tags=["Emprunts"])
+
+@app.get("/")
+def read_root():
+    return {"Hello": "World"}
 
 
 if __name__ == "__main__":

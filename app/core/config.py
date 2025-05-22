@@ -1,4 +1,4 @@
-from pydantic import BaseSettings
+from pydantic_settings import BaseSettings
 from typing import Optional
 
 class Settings(BaseSettings):
@@ -18,17 +18,23 @@ class Settings(BaseSettings):
     DB_PASS: Optional[str] = "password"  # À définir via une variable d'environnement en production
     DB_NAME: str = "library_db"
     # Construction de l'URL de la base de données
-    DATABASE_URL: str = f"postgresql://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
+    #DATABASE_URL: str = f"postgresql://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
+    DATABASE_URL: str = f"postgresql://{DB_USER}:{DB_PASS}@db:{DB_PORT}/{DB_NAME}"
     # Clé secrète pour l'encodage et le décodage des tokens JWT
     JWT_SECRET_KEY: str = "secret"  # À changer en production
     JWT_ALGORITHM: str = "HS256"  # Algorithme utilisé pour l'encodage JWT
     JWT_EXPIRE_MINUTES: int = 60 * 24 * 7  # Durée de validité des tokens (7 jours par défaut)
+
+    postgres_user: str
+    postgres_password: str
+    postgres_db: str
 
     class Config:
         # Indique à Pydantic de charger les variables d'environnement
         # et de les mapper aux attributs de la classe Settings.
         env_file = ".env"
         env_file_encoding = "utf-8"
+        extra = "forbid"
         # Préfixe pour les variables d'environnement
         # Toutes les variables d'environnement doivent commencer par ce préfixe
         # pour être prises en compte.

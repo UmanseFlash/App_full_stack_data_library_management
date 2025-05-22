@@ -7,6 +7,7 @@ from app.security import (
     verify_password,
     create_access_token,
     get_password_hash,
+    get_current_user
 )
 from datetime import timedelta
 from app.core.config import settings

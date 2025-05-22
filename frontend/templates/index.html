@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Système de Gestion de Bibliothèque</title>
+    <script src="[https://cdn.tailwindcss.com](https://cdn.tailwindcss.com)"></script>
+    <link href="/static/css/style.css" rel="stylesheet">
+    <style>
+        /* Styles personnalisés pour Inter font et coins arrondis */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6; /* Gris clair */
+        }
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            padding: 2rem;
+        }
+        .card {
+            background-color: #ffffff;
+            border-radius: 0.75rem; /* rounded-lg */
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            padding: 1.5rem;
+        }
+        /* Les classes .btn, .btn-primary, .btn-secondary, .input-field sont maintenant appliquées directement dans le HTML */
+        /* et n'ont plus besoin de la directive @apply ici. */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+        th, td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        th {
+            background-color: #f9fafb;
+            font-weight: 600;
+            color: #374151;
+        }
+        tr:hover {
+            background-color: #f3f4f6;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen flex flex-col">
+    <header class="bg-blue-700 text-white p-4 shadow-md">
+        <div class="container flex justify-between items-center">
+            <h1 class="text-2xl font-bold">Système de Bibliothèque</h1>
+            <nav>
+                <ul class="flex space-x-4">
+                    <li><button id="nav-login" class="px-4 py-2 rounded-md font-semibold transition duration-200 ease-in-out bg-gray-300 text-gray-800 hover:bg-gray-400">Connexion</button></li>
+                    <li><button id="nav-register" class="px-4 py-2 rounded-md font-semibold transition duration-200 ease-in-out bg-gray-300 text-gray-800 hover:bg-gray-400">Inscription</button></li>
+                    <li><button id="nav-books" class="px-4 py-2 rounded-md font-semibold transition duration-200 ease-in-out bg-gray-300 text-gray-800 hover:bg-gray-400">Livres</button></li>
+                    <li><button id="nav-members" class="px-4 py-2 rounded-md font-semibold transition duration-200 ease-in-out bg-gray-300 text-gray-800 hover:bg-gray-400">Membres</button></li>
+                    <li><button id="nav-loans" class="px-4 py-2 rounded-md font-semibold transition duration-200 ease-in-out bg-gray-300 text-gray-800 hover:bg-gray-400">Emprunts</button></li>
+                    <li><button id="nav-logout" class="px-4 py-2 rounded-md font-semibold transition duration-200 ease-in-out bg-gray-300 text-gray-800 hover:bg-gray-400 hidden">Déconnexion</button></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="flex-grow container mt-8">
+        <section id="login-section" class="card mb-8">
+            <h2 class="text-xl font-semibold mb-4">Connexion</h2>
+            <form id="login-form" class="space-y-4">
+                <div>
+                    <label for="login-username" class="block text-gray-700 text-sm font-bold mb-2">Nom d'utilisateur:</label>
+                    <input type="text" id="login-username" name="username" class="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 w-full" required>
+                </div>
+                <div>
+                    <label for="login-password" class="block text-gray-700 text-sm font-bold mb-2">Mot de passe:</label>
+                    <input type="password" id="login-password" name="password" class="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 w-full" required>
+                </div>
+                <button type="submit" class="px-4 py-2 rounded-md font-semibold transition duration-200 ease-in-out bg-blue-600 text-white hover:bg-blue-700 w-full">Se connecter</button>
+            </form>
+            <p id="login-message" class="mt-4 text-red-500"></p>
+        </section>
+
+        <section id="register-section" class="card mb-8 hidden">
+            <h2 class="text-xl font-semibold mb-4">Inscription</h2>
+            <form id="register-form" class="space-y-4">
+                <div>
+                    <label for="register-username" class="block text-gray-700 text-sm font-bold mb-2">Nom d'utilisateur:</label>
+                    <input type="text" id="register-username" name="username" class="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 w-full" required>
+                </div>
+                <div>
+                    <label for="register-email" class="block text-gray-700 text-sm font-bold mb-2">Email:</label>
+                    <input type="email" id="register-email" name="email" class="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 w-full" required>
+                </div>
+                <div>
+                    <label for="register-password" class="block text-gray-700 text-sm font-bold mb-2">Mot de passe:</label>
+                    <input type="password" id="register-password" name="password" class="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 w-full" required>
+                </div>
+                <div>
+                    <label for="register-first-name" class="block text-gray-700 text-sm font-bold mb-2">Prénom:</label>
+                    <input type="text" id="register-first-name" name="first_name" class="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 w-full" required>
+                </div>
+                <div>
+                    <label for="register-last-name" class="block text-gray-700 text-sm font-bold mb-2">Nom:</label>
+                    <input type="text" id="register-last-name" name="last_name" class="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 w-full" required>
+                </div>
+                <button type="submit" class="px-4 py-2 rounded-md font-semibold transition duration-200 ease-in-out bg-blue-600 text-white hover:bg-blue-700 w-full">S'inscrire</button>
+            </form>
+            <p id="register-message" class="mt-4 text-red-500"></p>
+        </section>
+
+        <section id="books-section" class="card mb-8 hidden">
+            <h2 class="text-xl font-semibold mb-4">Liste des Livres</h2>
+            <div class="flex justify-between items-center mb-4">
+                <input type="text" id="books-search-query" placeholder="Rechercher par titre, auteur, ISBN..." class="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 flex-grow mr-2">
+                <button id="books-search-btn" class="px-4 py-2 rounded-md font-semibold transition duration-200 ease-in-out bg-blue-600 text-white hover:bg-blue-700">Rechercher</button>
+                <button id="books-add-btn" class="px-4 py-2 rounded-md font-semibold transition duration-200 ease-in-out bg-blue-600 text-white hover:bg-blue-700 ml-2">Ajouter un Livre</button>
+            </div>
+            <div id="books-list-container">
+                <p class="text-gray-600">Chargement des livres...</p>
+            </div>
+            <div class="flex justify-between items-center mt-4">
+                <button id="books-prev-page" class="px-4 py-2 rounded-md font-semibold transition duration-200 ease-in-out bg-gray-300 text-gray-800 hover:bg-gray-400">Précédent</button>
+                <span id="books-page-info" class="text-gray-700">Page 1</span>
+                <button id="books-next-page" class="px-4 py-2 rounded-md font-semibold transition duration-200 ease-in-out bg-gray-300 text-gray-800 hover:bg-gray-400">Suivant</button>
+            </div>
+        </section>
+
+        <section id="members-section" class="card mb-8 hidden">
+            <h2 class="text-xl font-semibold mb-4">Liste des Membres</h2>
+            <div class="flex justify-between items-center mb-4">
+                <input type="text" id="members-search-query" placeholder="Rechercher par nom, email..." class="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 flex-grow mr-2">
+                <button id="members-search-btn" class="px-4 py-2 rounded-md font-semibold transition duration-200 ease-in-out bg-blue-600 text-white hover:bg-blue-700">Rechercher</button>
+                <button id="members-add-btn" class="px-4 py-2 rounded-md font-semibold transition duration-200 ease-in-out bg-blue-600 text-white hover:bg-blue-700 ml-2">Ajouter un Membre</button>
+            </div>
+            <div id="members-list-container">
+                <p class="text-gray-600">Chargement des membres...</p>
+            </div>
+            <div class="flex justify-between items-center mt-4">
+                <button id="members-prev-page" class="px-4 py-2 rounded-md font-semibold transition duration-200 ease-in-out bg-gray-300 text-gray-800 hover:bg-gray-400">Précédent</button>
+                <span id="members-page-info" class="text-gray-700">Page 1</span>
+                <button id="members-next-page" class="px-4 py-2 rounded-md font-semibold transition duration-200 ease-in-out bg-gray-300 text-gray-800 hover:bg-gray-400">Suivant</button>
+            </div>
+        </section>
+
+        <section id="loans-section" class="card mb-8 hidden">
+            <h2 class="text-xl font-semibold mb-4">Liste des Emprunts</h2>
+            <div class="flex justify-between items-center mb-4">
+                <select id="loans-status-filter" class="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 mr-2">
+                    <option value="">Tous les statuts</option>
+                    <option value="En cours">En cours</option>
+                    <option value="Retourné">Retourné</option>
+                    <option value="En retard">En retard</option>
+                </select>
+                <button id="loans-add-btn" class="px-4 py-2 rounded-md font-semibold transition duration-200 ease-in-out bg-blue-600 text-white hover:bg-blue-700 ml-2">Nouvel Emprunt</button>
+                <button id="loans-overdue-btn" class="px-4 py-2 rounded-md font-semibold transition duration-200 ease-in-out bg-blue-600 text-white hover:bg-blue-700 ml-2">Emprunts en Retard</button>
+            </div>
+            <div id="loans-list-container">
+                <p class="text-gray-600">Chargement des emprunts...</p>
+            </div>
+            <div class="flex justify-between items-center mt-4">
+                <button id="loans-prev-page" class="px-4 py-2 rounded-md font-semibold transition duration-200 ease-in-out bg-gray-300 text-gray-800 hover:bg-gray-400">Précédent</button>
+                <span id="loans-page-info" class="text-gray-700">Page 1</span>
+                <button id="loans-next-page" class="px-4 py-2 rounded-md font-semibold transition duration-200 ease-in-out bg-gray-300 text-gray-800 hover:bg-gray-400">Suivant</button>
+            </div>
+        </section>
+
+        <div id="add-book-modal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden flex items-center justify-center">
+            <div class="bg-white p-6 rounded-lg shadow-lg w-1/3">
+                <h3 class="text-lg font-semibold mb-4">Ajouter un Nouveau Livre</h3>
+                <form id="add-book-form" class="space-y-4">
+                    <div>
+                        <label for="add-book-title" class="block text-gray-700 text-sm font-bold mb-2">Titre:</label>
+                        <input type="text" id="add-book-title" name="title" class="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 w-full" required>
+                    </div>
+                    <div>
+                        <label for="add-book-author" class="block text-gray-700 text-sm font-bold mb-2">Auteur:</label>
+                        <input type="text" id="add-book-author" name="author" class="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 w-full" required>
+                    </div>
+                    <div>
+                        <label for="add-book-isbn" class="block text-gray-700 text-sm font-bold mb-2">ISBN:</label>
+                        <input type="text" id="add-book-isbn" name="isbn" class="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 w-full" required>
+                    </div>
+                    <div>
+                        <label for="add-book-publisher" class="block text-gray-700 text-sm font-bold mb-2">Éditeur:</label>
+                        <input type="text" id="add-book-publisher" name="publisher" class="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 w-full">
+                    </div>
+                    <div>
+                        <label for="add-book-publication-date" class="block text-gray-700 text-sm font-bold mb-2">Date de publication:</label>
+                        <input type="date" id="add-book-publication-date" name="publication_date" class="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 w-full">
+                    </div>
+                    <div>
+                        <label for="add-book-copies" class="block text-gray-700 text-sm font-bold mb-2">Nombre d'exemplaires:</label>
+                        <input type="number" id="add-book-copies" name="number_of_copies" class="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 w-full" value="1" min="1" required>
+                    </div>
+                    <div class="flex justify-end space-x-2">
+                        <button type="button" id="cancel-add-book" class="px-4 py-2 rounded-md font-semibold transition duration-200 ease-in-out bg-gray-300 text-gray-800 hover:bg-gray-400">Annuler</button>
+                        <button type="submit" class="px-4 py-2 rounded-md font-semibold transition duration-200 ease-in-out bg-blue-600 text-white hover:bg-blue-700">Ajouter</button>
+                    </div>
+                </form>
+                <p id="add-book-message" class="mt-4 text-red-500"></p>
+            </div>
+        </div>
+
+        <div id="add-member-modal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden flex items-center justify-center">
+            <div class="bg-white p-6 rounded-lg shadow-lg w-1/3">
+                <h3 class="text-lg font-semibold mb-4">Ajouter un Nouveau Membre</h3>
+                <form id="add-member-form" class="space-y-4">
+                    <div>
+                        <label for="add-member-membership-number" class="block text-gray-700 text-sm font-bold mb-2">Numéro d'adhérent:</label>
+                        <input type="text" id="add-member-membership-number" name="membership_number" class="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 w-full" required>
+                    </div>
+                    <div>
+                        <label for="add-member-first-name" class="block text-gray-700 text-sm font-bold mb-2">Prénom:</label>
+                        <input type="text" id="add-member-first-name" name="first_name" class="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 w-full" required>
+                    </div>
+                    <div>
+                        <label for="add-member-last-name" class="block text-gray-700 text-sm font-bold mb-2">Nom:</label>
+                        <input type="text" id="add-member-last-name" name="last_name" class="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 w-full" required>
+                    </div>
+                    <div>
+                        <label for="add-member-email" class="block text-gray-700 text-sm font-bold mb-2">Email:</label>
+                        <input type="email" id="add-member-email" name="email" class="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 w-full" required>
+                    </div>
+                    <div>
+                        <label for="add-member-phone" class="block text-gray-700 text-sm font-bold mb-2">Téléphone:</label>
+                        <input type="text" id="add-member-phone" name="phone_number" class="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 w-full">
+                    </div>
+                    <div>
+                        <label for="add-member-address" class="block text-gray-700 text-sm font-bold mb-2">Adresse:</label>
+                        <input type="text" id="add-member-address" name="address" class="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 w-full">
+                    </div>
+                     <div>
+                        <label for="add-member-user-id" class="block text-gray-700 text-sm font-bold mb-2">ID Utilisateur (lié au compte):</label>
+                        <input type="number" id="add-member-user-id" name="user_id" class="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 w-full" required>
+                    </div>
+                    <div class="flex justify-end space-x-2">
+                        <button type="button" id="cancel-add-member" class="px-4 py-2 rounded-md font-semibold transition duration-200 ease-in-out bg-gray-300 text-gray-800 hover:bg-gray-400">Annuler</button>
+                        <button type="submit" class="px-4 py-2 rounded-md font-semibold transition duration-200 ease-in-out bg-blue-600 text-white hover:bg-blue-700">Ajouter</button>
+                    </div>
+                </form>
+                <p id="add-member-message" class="mt-4 text-red-500"></p>
+            </div>
+        </div>
+
+        <div id="add-loan-modal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden flex items-center justify-center">
+            <div class="bg-white p-6 rounded-lg shadow-lg w-1/3">
+                <h3 class="text-lg font-semibold mb-4">Enregistrer un Nouvel Emprunt</h3>
+                <form id="add-loan-form" class="space-y-4">
+                    <div>
+                        <label for="add-loan-book-id" class="block text-gray-700 text-sm font-bold mb-2">ID du Livre:</label>
+                        <input type="number" id="add-loan-book-id" name="book_id" class="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 w-full" required>
+                    </div>
+                    <div>
+                        <label for="add-loan-member-id" class="block text-gray-700 text-sm font-bold mb-2">ID du Membre:</label>
+                        <input type="number" id="add-loan-member-id" name="member_id" class="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 w-full" required>
+                    </div>
+                    <div>
+                        <label for="add-loan-date" class="block text-gray-700 text-sm font-bold mb-2">Date d'emprunt:</label>
+                        <input type="date" id="add-loan-date" name="loan_date" class="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 w-full" value="{{ today }}" required>
+                    </div>
+                    <div class="flex justify-end space-x-2">
+                        <button type="button" id="cancel-add-loan" class="px-4 py-2 rounded-md font-semibold transition duration-200 ease-in-out bg-gray-300 text-gray-800 hover:bg-gray-400">Annuler</button>
+                        <button type="submit" class="px-4 py-2 rounded-md font-semibold transition duration-200 ease-in-out bg-blue-600 text-white hover:bg-blue-700">Enregistrer</button>
+                    </div>
+                </form>
+                <p id="add-loan-message" class="mt-4 text-red-500"></p>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="bg-blue-700 text-white p-4 mt-8 shadow-md text-center">
+        <p>&copy; 2025 Système de Gestion de Bibliothèque. Tous droits réservés.</p>
+    </footer>
+
+    <script src="/static/js/script.js"></script>
+</body>
+</html>

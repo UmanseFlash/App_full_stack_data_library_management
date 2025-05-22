@@ -25,7 +25,7 @@ class User(UserCreate):
     last_login: Optional[date]
 
     class Config:
-        orm_mode = True
+        from_attributes = True  # Pydantic v2
 
 
 # Schéma pour la connexion d'un utilisateur
@@ -58,7 +58,7 @@ class Book(BookCreate):
     id: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True  # Pydantic v2
 
 
 
@@ -98,7 +98,7 @@ class Member(MemberCreate):
     id: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True  # Pydantic v2
 
 
 # Schéma pour la mise à jour d'un membre
@@ -126,7 +126,7 @@ class LoanCreate(BaseModel):
 class Loan(LoanCreate):
     id: int
     class Config:
-        orm_mode = True
+        from_attributes = True  # Pydantic v2
 
 # Schéma pour la représentation d'un emprunt avec les détails du livre et du membre
 class LoanWithDetails(BaseModel):
@@ -138,4 +138,4 @@ class LoanWithDetails(BaseModel):
     status: str
 
     class Config:
-        orm_mode = True
+        from_attributes = True  # Pydantic v2

@@ -3,3 +3,15 @@ sqlalchemy
 pydantic
 psycopg2
 python-slugify
+pydantic-settings
+uvicorn
+fastapi
+uvicorn[standard]
+SQLAlchemy
+psycopg2-binary # ou asynpg si tu utilises l'async  
+python-jose[cryptography]
+passlib
+pytest
+httpx
+email-validator
+python-multipart

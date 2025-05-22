@@ -1,7 +1,5 @@
-#version: '3.4'
-
+version: '3.8'
 services:
-  # Service pour la base de données PostgreSQL
   db:
     image: postgres:14-alpine
     volumes:
@@ -18,11 +16,10 @@ services:
       timeout: 5s
       retries: 5
 
-  # Service pour l'API FastAPI
   api:
-    build: . 
+    build: .
     volumes:
-      - ./app:/app
+      - .:/app
     ports:
       - 8000:8000
     environment:
@@ -31,15 +28,31 @@ services:
       - APP_DB_PASS=password
       - APP_DB_NAME=library_db
       - APP_JWT_SECRET_KEY=secret
+      #- DATABASE_URL: postgresql://user:password@db:5432/library_db
     depends_on:
       - db
     restart: always
-    healthcheck: 
-      test: ["CMD-SHELL", "curl --fail http://localhost:8000/health"] 
+    healthcheck:
+      test: ["CMD-SHELL", "curl --fail http://localhost:8000/health"]
       interval: 10s
       timeout: 5s
       retries: 5
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile 
+    volumes:
+      - ./frontend:/app
+    ports:
+      - 5000:5000
+    environment:
+      - FLASK_APP=frontend_app.py
+      - FLASK_ENV=development
+      - API_URL=http://api:8000
+    depends_on:
+      api:
+        condition: service_healthy
+    restart: always
 
-# Volumes nommés pour la persistance des données
 volumes:
   postgres_data:
